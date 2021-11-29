@@ -8,6 +8,7 @@ import (
 	"os"
 	todoListBackend "todolistBackend"
 	"todolistBackend/pkg/handler"
+	"todolistBackend/pkg/logging"
 	"todolistBackend/pkg/repository"
 	"todolistBackend/pkg/service"
 )
@@ -18,11 +19,12 @@ const (
 )
 
 func main() {
+	logger := logging.GetLogger()
 	if err := initConfig(); err != nil {
 		log.Fatalf("error initializing configs: %s", err.Error())
 	}
 	if err := godotenv.Load(); err != nil {
-		log.Fatalf("error loading env variables: %s", err.Error())
+		logger.Fatalf("error loading env variables: %s", err.Error())
 	}
 
 	db, err := repository.NewPostgresDB(repository.Config{
@@ -34,7 +36,7 @@ func main() {
 		Password: os.Getenv("db.password"),
 	})
 	if err != nil {
-		log.Fatalf("failed to initialize db due to error: %s", err.Error())
+		logger.Fatalf("failed to initialize db due to error: %s", err.Error())
 	}
 
 	repos := repository.NewRepository(db)
@@ -43,7 +45,7 @@ func main() {
 
 	srv := new(todoListBackend.Server)
 	if err := srv.Run("8000", handlers.InitRoutes()); err != nil {
-		log.Fatalf("error occured while running http server: %s", err.Error())
+		logger.Fatalf("error occured while running http server: %s", err.Error())
 	}
 }
 
