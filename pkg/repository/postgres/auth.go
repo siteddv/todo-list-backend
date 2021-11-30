@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
 	todo "todolistBackend"
+	"todolistBackend/pkg/repository/constants"
 )
 
 type AuthPostgres struct {
@@ -17,7 +18,7 @@ func NewAuthPostgres(db *sqlx.DB) *AuthPostgres {
 func (r *AuthPostgres) CreateUser(user todo.User) (int, error) {
 	var id int
 	query := fmt.Sprintf("INSERT INTO %s (%s, %s, %s) values ($1, $2, $3) RETURNING id",
-		usersTable, name, username, password_hash)
+		constants.UsersTable, constants.Name, constants.Username, constants.PasswordHash)
 
 	row := r.db.QueryRow(query, user.Name, user.Username, user.Password)
 	if err := row.Scan(&id); err != nil {
@@ -27,12 +28,12 @@ func (r *AuthPostgres) CreateUser(user todo.User) (int, error) {
 	return id, nil
 }
 
-func (r *AuthPostgres) GetUser(userName, password string) (todo.User, error) {
+func (r *AuthPostgres) GetUser(username, password string) (todo.User, error) {
 	var user todo.User
 	query := fmt.Sprintf("SELECT %s FROM %s WHERE %s=$1 AND %s=$2",
-		id, usersTable, username, password_hash)
+		constants.Id, constants.UsersTable, constants.Username, constants.PasswordHash)
 
-	err := r.db.Get(&user, query, userName, password)
+	err := r.db.Get(&user, query, username, password)
 
 	return user, err
 }
