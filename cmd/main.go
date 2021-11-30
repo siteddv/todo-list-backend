@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/viper"
 	"log"
 	"os"
-	todoListBackend "todolistBackend"
+	todo "todolistBackend"
 	"todolistBackend/pkg/handler"
 	"todolistBackend/pkg/logging"
 	"todolistBackend/pkg/repository"
@@ -43,7 +43,7 @@ func main() {
 	services := service.NewService(repos)
 	handlers := handler.NewHandler(services)
 
-	srv := new(todoListBackend.Server)
+	srv := new(todo.Server)
 	if err := srv.Run("8000", handlers.InitRoutes()); err != nil {
 		logger.Fatalf("error occured while running http server: %s", err.Error())
 	}

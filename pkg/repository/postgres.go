@@ -7,6 +7,22 @@ import (
 
 const driverName = "postgres"
 
+//Tables names
+const (
+	usersTable      = "users"
+	todoListsTable  = "todo_lists"
+	usersListsTable = "users_lists"
+	todoItemsTable  = "todo_items"
+	listsItemsTable = "lists_items"
+)
+
+//Tables columns names
+const (
+	name          = "name"
+	username      = "username"
+	password_hash = "password_hash"
+)
+
 type Config struct {
 	Host     string
 	Port     string
