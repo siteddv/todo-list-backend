@@ -3,6 +3,7 @@ package repository
 import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
+	"strings"
 	todo "todolistBackend"
 	"todolistBackend/pkg/repository/constants"
 )
@@ -26,7 +27,7 @@ func (r *TodoListPostgres) Create(userId int, list todo.TodoList) (int, error) {
 		constants.TodoListTable, constants.Title, constants.Description, constants.Id)
 	row := tx.QueryRow(createListQuery, list.Title, list.Description)
 	if err := row.Scan(&listId); err != nil {
-		tx.Rollback()
+		_ = tx.Rollback()
 		return 0, err
 	}
 
@@ -34,7 +35,7 @@ func (r *TodoListPostgres) Create(userId int, list todo.TodoList) (int, error) {
 		constants.UsersListsTable, constants.UserId, constants.ListId, constants.Id)
 	_, err = tx.Exec(createUsersListsQuery, userId, listId)
 	if err != nil {
-		tx.Rollback()
+		_ = tx.Rollback()
 		return 0, err
 	}
 
@@ -69,4 +70,44 @@ func (r *TodoListPostgres) GetById(userId, listId int) (todo.TodoList, error) {
 	err := r.db.Get(&list, query, userId, listId)
 
 	return list, err
+}
+
+func (r *TodoListPostgres) DeleteById(userId, listId int) error {
+	query := fmt.Sprintf(
+		"DELETE FROM %s tl USING ul "+
+			"WHERE tl.%s = ul.%s WHERE ul.%s = $1 AND ul.%s = $2",
+		constants.TodoListTable, constants.UsersListsTable,
+		constants.Id, constants.ListId, constants.UserId, constants.ListId)
+
+	_, err := r.db.Exec(query, userId, listId)
+	return err
+}
+
+func (r *TodoListPostgres) Update(userId, listId int, list todo.UpdateListInput) error {
+	setValues := make([]string, 0)
+	args := make([]interface{}, 0)
+	argId := 1
+
+	if list.Title != nil {
+		setValues = append(setValues, fmt.Sprintf("%s=$%d", constants.Title, argId))
+		args = append(args, *list.Title)
+		argId++
+	}
+
+	if list.Description != nil {
+		setValues = append(setValues, fmt.Sprintf("%s=$%d", constants.Description, argId))
+		args = append(args, *list.Description)
+		argId++
+	}
+
+	args = append(args, listId, userId)
+	setQuery := strings.Join(setValues, ", ")
+
+	query := fmt.Sprintf("UPDATE %s tl SET %s FROM %s ul "+
+		"WHERE tl.%s=ul.%s AND ul.%s=$%d AND ul.%s=$%d",
+		constants.TodoListTable, setQuery, constants.UsersListsTable,
+		constants.Id, constants.ListId, constants.ListId, argId, constants.UserId, argId+1)
+
+	_, err := r.db.Exec(query, args...)
+	return err
 }
