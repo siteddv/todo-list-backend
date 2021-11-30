@@ -1,8 +1,7 @@
-POST http://localhost:8000/auth/sign-up
+POST http://localhost:8000/auth/sign-in
 Content-Type: application/json
 
 {
-  "name": "dim",
   "username": "dimych",
   "password": "12345"
 }

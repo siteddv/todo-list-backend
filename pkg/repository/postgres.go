@@ -18,6 +18,7 @@ const (
 
 //Tables columns names
 const (
+	id            = "id"
 	name          = "name"
 	username      = "username"
 	password_hash = "password_hash"
