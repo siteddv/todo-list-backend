@@ -29,10 +29,10 @@ func (s *TodoItemService) DeleteById(listId, itemId int) error {
 	return s.repo.DeleteById(listId, itemId)
 }
 
-func (s *TodoItemService) Update(itemId int, item todo.UpdateItemInput) error {
+func (s *TodoItemService) Update(listId int, itemId int, item todo.UpdateItemInput) error {
 	if err := item.Validate(); err != nil {
 		return err
 
 	}
-	return s.repo.Update(itemId, item)
+	return s.repo.Update(listId, itemId, item)
 }

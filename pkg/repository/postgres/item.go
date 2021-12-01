@@ -74,16 +74,16 @@ func (r *TodoItemPostgres) GetById(listId, itemId int) (todo.TodoItem, error) {
 
 func (r *TodoItemPostgres) DeleteById(listId, itemId int) error {
 	query := fmt.Sprintf(
-		"DELETE FROM %s tl USING ul "+
-			"WHERE tl.%s = ul.%s WHERE ul.%s = $1 AND ul.%s = $2",
-		constants.TodoListTable,
-		constants.Id, constants.ListId, constants.UserId, constants.ListId)
+		"DELETE FROM %s ti USING %s li "+
+			"WHERE ti.%s = li.%s AND li.%s = $1 AND li.%s = $2",
+		constants.TodoItemsTable, constants.ListsItemsTable,
+		constants.Id, constants.ItemId, constants.ListId, constants.ItemId)
 
 	_, err := r.db.Exec(query, listId, itemId)
 	return err
 }
 
-func (r *TodoItemPostgres) Update(itemId int, item todo.UpdateItemInput) error {
+func (r *TodoItemPostgres) Update(listId int, itemId int, item todo.UpdateItemInput) error {
 	setValues := make([]string, 0)
 	args := make([]interface{}, 0)
 	argId := 1
@@ -100,12 +100,17 @@ func (r *TodoItemPostgres) Update(itemId int, item todo.UpdateItemInput) error {
 		argId++
 	}
 
+	setValues = append(setValues, fmt.Sprintf("%s=$%d", constants.Done, argId))
+	args = append(args, item.Done)
+	argId++
+
+	args = append(args, listId, itemId)
 	setQuery := strings.Join(setValues, ", ")
 
-	query := fmt.Sprintf("UPDATE %s tl SET %s FROM %s ul "+
-		"WHERE tl.%s=ul.%s AND ul.%s=$%d AND ul.%s=$%d",
-		constants.TodoListTable, setQuery, constants.UsersListsTable,
-		constants.Id, constants.ListId, constants.ListId, argId, constants.UserId, argId+1)
+	query := fmt.Sprintf("UPDATE %s ti SET %s FROM %s li "+
+		"WHERE ti.%s=li.%s AND li.%s=$%d AND li.%s=$%d",
+		constants.TodoItemsTable, setQuery, constants.ListsItemsTable,
+		constants.Id, constants.ItemId, constants.ListId, argId, constants.ItemId, argId+1)
 
 	_, err := r.db.Exec(query, args...)
 	return err
