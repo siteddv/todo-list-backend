@@ -18,6 +18,10 @@ type GetAllListsResponse struct {
 	Data []todo.TodoList `json:"data"`
 }
 
+type GetAllItemsResponse struct {
+	Data []todo.TodoItem `json:"data"`
+}
+
 func newErrorResponse(ctx *gin.Context, statusCode int, message string) {
 	logrus.Error(message)
 	ctx.AbortWithStatusJSON(statusCode, errorResponse{message})

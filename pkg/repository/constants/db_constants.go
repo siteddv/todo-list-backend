@@ -4,7 +4,7 @@ package constants
 const (
 	UsersTable      = "users"
 	TodoListTable   = "todo_lists"
-	UsersListsTable = "user_lists"
+	UsersListsTable = "users_lists"
 	TodoItemsTable  = "todo_items"
 	ListsItemsTable = "lists_items"
 )
@@ -17,6 +17,8 @@ const (
 	PasswordHash = "password_hash"
 	Title        = "title"
 	Description  = "description"
+	Done         = "done"
 	UserId       = "user_id"
 	ListId       = "list_id"
+	ItemId       = "item_id"
 )

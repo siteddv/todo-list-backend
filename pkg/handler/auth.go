@@ -14,15 +14,13 @@ func (h *Handler) signUp(c *gin.Context) {
 		return
 	}
 
-	id, err := h.services.Authorization.CreateUser(input)
+	_, err := h.services.Authorization.CreateUser(input)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusOK, map[string]interface{}{
-		"id": id,
-	})
+	signIn(input.Username, input.Password, h, c)
 }
 
 type signInInput struct {
@@ -38,7 +36,11 @@ func (h *Handler) signIn(c *gin.Context) {
 		return
 	}
 
-	token, err := h.services.Authorization.GenerateToken(input.Username, input.Password)
+	signIn(input.Username, input.Password, h, c)
+}
+
+func signIn(username, password string, h *Handler, c *gin.Context) {
+	token, err := h.services.Authorization.GenerateToken(username, password)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
