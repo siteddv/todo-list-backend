@@ -2,6 +2,10 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
+
+	_ "todolistBackend/docs"
 	"todolistBackend/pkg/service"
 )
 
@@ -42,6 +46,8 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			}
 		}
 	}
+
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	return router
 }
