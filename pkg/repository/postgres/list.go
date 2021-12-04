@@ -3,6 +3,7 @@ package repository
 import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
+	"strconv"
 	"strings"
 	todo "todolistBackend"
 	"todolistBackend/pkg/repository/constants"
@@ -73,13 +74,37 @@ func (r *TodoListPostgres) GetById(userId, listId int) (todo.TodoList, error) {
 }
 
 func (r *TodoListPostgres) DeleteById(userId, listId int) error {
-	query := fmt.Sprintf(
+	var intListItems []int
+
+	selectListItemsQuery := fmt.Sprintf(
+		"SELECT %s FROM %S WHERE %s=$1",
+		constants.Id, constants.ListsItemsTable, constants.ListId)
+	err := r.db.Select(&intListItems, selectListItemsQuery, listId)
+	if err != nil {
+		return err
+	}
+
+	stringListItems := make([]string, len(intListItems))
+	for i, s := range intListItems {
+		stringListItems[i] = strconv.Itoa(s)
+	}
+	joinedListItems := strings.Join(stringListItems, ", ")
+
+	deleteListItemsQuery := fmt.Sprintf(
+		"DELETE FROM %s WHERE %s IN (%s)",
+		constants.TodoItemsTable, constants.Id, joinedListItems)
+	_, err = r.db.Exec(deleteListItemsQuery)
+	if err != nil {
+		return err
+	}
+
+	deleteListQuery := fmt.Sprintf(
 		"DELETE FROM %s tl USING %s ul "+
 			"WHERE tl.%s = ul.%s AND ul.%s = $1 AND ul.%s = $2",
 		constants.TodoListTable, constants.UsersListsTable,
 		constants.Id, constants.ListId, constants.UserId, constants.ListId)
 
-	_, err := r.db.Exec(query, userId, listId)
+	_, err = r.db.Exec(deleteListQuery, userId, listId)
 	return err
 }
 
