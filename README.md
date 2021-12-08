@@ -22,3 +22,6 @@ If the application is launched for the first time, you need to apply migrations 
 ```
 make migrate
 ```
+
+### Have a nice experience with repository! 
+#### If you have any questions and suggestions, please contact me via email siteddv@gmail.com
