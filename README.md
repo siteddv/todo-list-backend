@@ -1,4 +1,4 @@
-# REST API For Creating TODO Lists on Go
+# REST API For Creating TODO Lists in Go
 
 ## When I was creating the project, I've improved my skills in:
 - Development of Web Applications on Go, following the REST API design.
