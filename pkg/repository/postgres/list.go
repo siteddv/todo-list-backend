@@ -77,7 +77,7 @@ func (r *TodoListPostgres) DeleteById(userId, listId int) error {
 	var intListItems []int
 
 	selectListItemsQuery := fmt.Sprintf(
-		"SELECT %s FROM %S WHERE %s=$1",
+		"SELECT %s FROM %s WHERE %s=$1",
 		constants.Id, constants.ListsItemsTable, constants.ListId)
 	err := r.db.Select(&intListItems, selectListItemsQuery, listId)
 	if err != nil {
