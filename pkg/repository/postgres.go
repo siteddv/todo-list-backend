@@ -16,7 +16,20 @@ type Config struct {
 	SSLMode  string
 }
 
-func NewPostgresDB(cfg Config) (*sqlx.DB, error) {
+func NewConfig(host string, port string, username string, password string, dbName string, sslMode string) *Config {
+	result := &Config{
+		Host:     host,
+		Port:     port,
+		Username: username,
+		DBName:   dbName,
+		SSLMode:  sslMode,
+		Password: password,
+	}
+
+	return result
+}
+
+func NewPostgresDB(cfg *Config) (*sqlx.DB, error) {
 	dataSourceName := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s",
 		cfg.Host, cfg.Port, cfg.Username, cfg.DBName, cfg.Password, cfg.SSLMode)
 

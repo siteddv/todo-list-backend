@@ -41,14 +41,16 @@ func main() {
 		logger.Fatalf("error loading env variables: %s", err.Error())
 	}
 
-	db, err := repository.NewPostgresDB(repository.Config{
-		Host:     viper.GetString("db.host"),
-		Port:     viper.GetString("db.port"),
-		Username: viper.GetString("db.username"),
-		DBName:   viper.GetString("db.name"),
-		SSLMode:  viper.GetString("db.sslmode"),
-		Password: os.Getenv("db.password"),
-	})
+	cfg := repository.NewConfig(
+		viper.GetString("db.host"),
+		viper.GetString("db.port"),
+		viper.GetString("db.username"),
+		os.Getenv("db.password"),
+		viper.GetString("db.name"),
+		viper.GetString("db.sslmode"),
+	)
+
+	db, err := repository.NewPostgresDB(cfg)
 	if err != nil {
 		logger.Fatalf("failed to initialize db due to error: %s", err.Error())
 	}
