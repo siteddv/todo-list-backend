@@ -14,6 +14,7 @@ type writerHook struct {
 	LogLevels []logrus.Level
 }
 
+// Fire is used for write log
 func (hook *writerHook) Fire(entry *logrus.Entry) error {
 	line, err := entry.String()
 	if err != nil {
@@ -28,24 +29,29 @@ func (hook *writerHook) Fire(entry *logrus.Entry) error {
 	return err
 }
 
+// Levels returns a collection of log levels
 func (hook *writerHook) Levels() []logrus.Level {
 	return hook.LogLevels
 }
 
 var e *logrus.Entry
 
+// Logger is used for logging
 type Logger struct {
 	*logrus.Entry
 }
 
+// GetLogger returns pointer on instance of Logger
 func GetLogger() *Logger {
 	return &Logger{e}
 }
 
+// GetLoggerWithField is used for Add a single field to the Entry
 func (l *Logger) GetLoggerWithField(k string, v interface{}) *Logger {
 	return &Logger{l.WithField(k, v)}
 }
 
+// init initializes logging factory
 func init() {
 	l := logrus.New()
 	l.SetReportCaller(true)

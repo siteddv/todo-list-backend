@@ -4,17 +4,17 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
-	todo "todolistBackend"
+	"todolistBackend/pkg/model"
 )
 
-// @Summary Create todo list
+// @Summary Create list model
 // @Security ApiKeyAuth
 // @Tags lists
-// @Description create todo list
+// @Description create list model
 // @ID create-list
 // @Accept  json
 // @Produce  json
-// @Param input body todo.TodoList true "list info"
+// @Param input body model.TodoList true "list info"
 // @Success 200 {integer} integer 1
 // @Failure 400,404 {object} errorResponse
 // @Failure 500 {object} errorResponse
@@ -26,7 +26,7 @@ func (h *Handler) createList(c *gin.Context) {
 		return
 	}
 
-	var input todo.TodoList
+	var input model.TodoList
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
@@ -79,7 +79,7 @@ func (h *Handler) getAllLists(c *gin.Context) {
 // @ID get-list-by-id
 // @Accept  json
 // @Produce  json
-// @Success 200 {object} todo.TodoList
+// @Success 200 {object} model.TodoList
 // @Failure 400,404 {object} errorResponse
 // @Failure 500 {object} errorResponse
 // @Failure default {object} errorResponse
@@ -112,7 +112,7 @@ func (h *Handler) getListById(c *gin.Context) {
 // @ID put-list-by-id
 // @Accept  json
 // @Produce  json
-// @Param input body todo.TodoList true "list info"
+// @Param input body model.TodoList true "list info"
 // @Success 200 {string} string 1
 // @Failure 400,404 {object} errorResponse
 // @Failure 500 {object} errorResponse
@@ -130,7 +130,7 @@ func (h *Handler) updateList(c *gin.Context) {
 		return
 	}
 
-	var input todo.UpdateListInput
+	var input model.UpdateListInput
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return

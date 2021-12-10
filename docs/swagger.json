@@ -67,7 +67,7 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "create todo list",
+                "description": "create list model",
                 "consumes": [
                     "application/json"
                 ],
@@ -77,7 +77,7 @@
                 "tags": [
                     "lists"
                 ],
-                "summary": "Create todo list",
+                "summary": "Create list model",
                 "operationId": "create-list",
                 "parameters": [
                     {
@@ -350,7 +350,7 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "create todo item",
+                "description": "create item model",
                 "consumes": [
                     "application/json"
                 ],
@@ -360,7 +360,7 @@
                 "tags": [
                     "items"
                 ],
-                "summary": "Create todo item",
+                "summary": "Create item model",
                 "operationId": "create-item",
                 "parameters": [
                     {

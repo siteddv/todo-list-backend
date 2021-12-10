@@ -9,14 +9,17 @@ import (
 	"todolistBackend/pkg/service"
 )
 
+// Handler contains collection of services for routing
 type Handler struct {
 	services *service.Service
 }
 
+// NewHandler creates new instance of Handler and return pointer on this one
 func NewHandler(services *service.Service) *Handler {
 	return &Handler{services: services}
 }
 
+// InitRoutes initialize endpoints and returns handler for server routing handling
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
 

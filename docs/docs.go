@@ -81,7 +81,7 @@ var doc = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "create todo list",
+                "description": "create list model",
                 "consumes": [
                     "application/json"
                 ],
@@ -91,7 +91,7 @@ var doc = `{
                 "tags": [
                     "lists"
                 ],
-                "summary": "Create todo list",
+                "summary": "Create list model",
                 "operationId": "create-list",
                 "parameters": [
                     {
@@ -364,7 +364,7 @@ var doc = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "create todo item",
+                "description": "create item model",
                 "consumes": [
                     "application/json"
                 ],
@@ -374,7 +374,7 @@ var doc = `{
                 "tags": [
                     "items"
                 ],
-                "summary": "Create todo item",
+                "summary": "Create item model",
                 "operationId": "create-item",
                 "parameters": [
                     {

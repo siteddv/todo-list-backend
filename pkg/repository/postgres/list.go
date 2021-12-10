@@ -5,7 +5,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	"strconv"
 	"strings"
-	todo "todolistBackend"
+	"todolistBackend/pkg/model"
 	"todolistBackend/pkg/repository/constants"
 )
 
@@ -17,7 +17,7 @@ func NewTodoListPostgres(db *sqlx.DB) *TodoListPostgres {
 	return &TodoListPostgres{db: db}
 }
 
-func (r *TodoListPostgres) Create(userId int, list todo.TodoList) (int, error) {
+func (r *TodoListPostgres) Create(userId int, list model.TodoList) (int, error) {
 	tx, err := r.db.Begin()
 	if err != nil {
 		return 0, err
@@ -43,8 +43,8 @@ func (r *TodoListPostgres) Create(userId int, list todo.TodoList) (int, error) {
 	return listId, tx.Commit()
 }
 
-func (r *TodoListPostgres) GetAll(userId int) ([]todo.TodoList, error) {
-	var lists []todo.TodoList
+func (r *TodoListPostgres) GetAll(userId int) ([]model.TodoList, error) {
+	var lists []model.TodoList
 
 	query := fmt.Sprintf(
 		"SELECT tl.%s, tl.%s, tl.%s "+
@@ -58,8 +58,8 @@ func (r *TodoListPostgres) GetAll(userId int) ([]todo.TodoList, error) {
 	return lists, err
 }
 
-func (r *TodoListPostgres) GetById(userId, listId int) (todo.TodoList, error) {
-	var list todo.TodoList
+func (r *TodoListPostgres) GetById(userId, listId int) (model.TodoList, error) {
+	var list model.TodoList
 
 	query := fmt.Sprintf(
 		"SELECT tl.%s, tl.%s, tl.%s "+
@@ -108,7 +108,7 @@ func (r *TodoListPostgres) DeleteById(userId, listId int) error {
 	return err
 }
 
-func (r *TodoListPostgres) Update(userId, listId int, list todo.UpdateListInput) error {
+func (r *TodoListPostgres) Update(userId, listId int, list model.UpdateListInput) error {
 	setValues := make([]string, 0)
 	args := make([]interface{}, 0)
 	argId := 1

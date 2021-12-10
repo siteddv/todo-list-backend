@@ -3,7 +3,7 @@ package handler
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	todo "todolistBackend"
+	"todolistBackend/pkg/model"
 )
 
 // @Summary SignUp
@@ -12,14 +12,14 @@ import (
 // @ID create-account
 // @Accept  json
 // @Produce  json
-// @Param input body todo.User true "account info"
+// @Param input body model.User true "account info"
 // @Success 200 {integer} string "token"
 // @Failure 400,404 {object} errorResponse
 // @Failure 500 {object} errorResponse
 // @Failure default {object} errorResponse
 // @Router /auth/sign-up [post]
 func (h *Handler) signUp(c *gin.Context) {
-	var input todo.User
+	var input model.User
 
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
@@ -63,6 +63,7 @@ func (h *Handler) signIn(c *gin.Context) {
 	signIn(input.Username, input.Password, h, c)
 }
 
+// signIn signs in the server by specified user username and password
 func signIn(username, password string, h *Handler, c *gin.Context) {
 	token, err := h.services.Authorization.GenerateToken(username, password)
 	if err != nil {

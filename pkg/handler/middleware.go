@@ -14,6 +14,7 @@ const (
 	tokenIndex              = 1
 )
 
+// checkUserIdentity checks whether the user is authorized or not and set user id into context
 func (h *Handler) checkUserIdentity(c *gin.Context) {
 	header := c.GetHeader(authorizationHeader)
 	if header == "" {
@@ -36,6 +37,7 @@ func (h *Handler) checkUserIdentity(c *gin.Context) {
 	c.Set(userIdKey, userId)
 }
 
+// getUserId returns id of authorized user and error
 func getUserId(c *gin.Context) (int, error) {
 	id, ok := c.Get(userIdKey)
 	if !ok {

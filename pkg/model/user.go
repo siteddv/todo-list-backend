@@ -1,5 +1,6 @@
-package todoListBackend
+package model
 
+// User model
 type User struct {
 	Id       int    `json:"-" db:"id"`
 	Name     string `json:"name" binding:"required"`

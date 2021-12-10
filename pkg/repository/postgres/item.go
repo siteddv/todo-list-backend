@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
 	"strings"
-	todo "todolistBackend"
+	"todolistBackend/pkg/model"
 	"todolistBackend/pkg/repository/constants"
 )
 
@@ -16,7 +16,7 @@ func NewTodoItemPostgres(db *sqlx.DB) *TodoItemPostgres {
 	return &TodoItemPostgres{db: db}
 }
 
-func (r *TodoItemPostgres) Create(listId int, item todo.TodoItem) (int, error) {
+func (r *TodoItemPostgres) Create(listId int, item model.TodoItem) (int, error) {
 	tx, err := r.db.Begin()
 	if err != nil {
 		return 0, err
@@ -42,8 +42,8 @@ func (r *TodoItemPostgres) Create(listId int, item todo.TodoItem) (int, error) {
 	return itemId, tx.Commit()
 }
 
-func (r *TodoItemPostgres) GetAll(listId int) ([]todo.TodoItem, error) {
-	var items []todo.TodoItem
+func (r *TodoItemPostgres) GetAll(listId int) ([]model.TodoItem, error) {
+	var items []model.TodoItem
 
 	query := fmt.Sprintf(
 		"SELECT ti.%s, ti.%s, ti.%s, ti.%s "+
@@ -57,8 +57,8 @@ func (r *TodoItemPostgres) GetAll(listId int) ([]todo.TodoItem, error) {
 	return items, err
 }
 
-func (r *TodoItemPostgres) GetById(listId, itemId int) (todo.TodoItem, error) {
-	var item todo.TodoItem
+func (r *TodoItemPostgres) GetById(listId, itemId int) (model.TodoItem, error) {
+	var item model.TodoItem
 
 	query := fmt.Sprintf(
 		"SELECT ti.%s, ti.%s, ti.%s, ti.%s "+
@@ -83,7 +83,7 @@ func (r *TodoItemPostgres) DeleteById(listId, itemId int) error {
 	return err
 }
 
-func (r *TodoItemPostgres) Update(listId int, itemId int, item todo.UpdateItemInput) error {
+func (r *TodoItemPostgres) Update(listId int, itemId int, item model.UpdateItemInput) error {
 	setValues := make([]string, 0)
 	args := make([]interface{}, 0)
 	argId := 1

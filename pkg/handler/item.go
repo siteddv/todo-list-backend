@@ -4,17 +4,17 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
-	todo "todolistBackend"
+	"todolistBackend/pkg/model"
 )
 
-// @Summary Create todo item
+// @Summary Create item model
 // @Security ApiKeyAuth
 // @Tags items
-// @Description create todo item
+// @Description create item model
 // @ID create-item
 // @Accept  json
 // @Produce  json
-// @Param input body todo.TodoItem true "item info"
+// @Param input body model.TodoItem true "item info"
 // @Success 200 {integer} integer 1
 // @Failure 400,404 {object} errorResponse
 // @Failure 500 {object} errorResponse
@@ -27,7 +27,7 @@ func (h *Handler) createItem(c *gin.Context) {
 		return
 	}
 
-	var input todo.TodoItem
+	var input model.TodoItem
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
@@ -82,7 +82,7 @@ func (h *Handler) getAllItems(c *gin.Context) {
 // @ID get-item-by-id
 // @Accept  json
 // @Produce  json
-// @Success 200 {object} todo.TodoItem
+// @Success 200 {object} model.TodoItem
 // @Failure 400,404 {object} errorResponse
 // @Failure 500 {object} errorResponse
 // @Failure default {object} errorResponse
@@ -116,7 +116,7 @@ func (h *Handler) getItemById(c *gin.Context) {
 // @ID put-item-by-id
 // @Accept  json
 // @Produce  json
-// @Param input body todo.TodoItem true "item info"
+// @Param input body model.TodoItem true "item info"
 // @Success 200 {string} string 1
 // @Failure 400,404 {object} errorResponse
 // @Failure 500 {object} errorResponse
@@ -136,7 +136,7 @@ func (h *Handler) updateItem(c *gin.Context) {
 		return
 	}
 
-	var input todo.UpdateItemInput
+	var input model.UpdateItemInput
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return

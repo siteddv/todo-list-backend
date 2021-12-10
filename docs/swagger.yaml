@@ -108,7 +108,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: create todo list
+      description: create list model
       operationId: create-list
       parameters:
       - description: list info
@@ -142,7 +142,7 @@ paths:
             $ref: '#/definitions/handler.errorResponse'
       security:
       - ApiKeyAuth: []
-      summary: Create todo list
+      summary: Create list model
       tags:
       - lists
   /api/lists/:id:
@@ -290,7 +290,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: create todo item
+      description: create item model
       operationId: create-item
       parameters:
       - description: item info
@@ -324,7 +324,7 @@ paths:
             $ref: '#/definitions/handler.errorResponse'
       security:
       - ApiKeyAuth: []
-      summary: Create todo item
+      summary: Create item model
       tags:
       - items
   /api/lists/:list_id/items/:item_id/:
