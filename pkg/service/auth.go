@@ -11,30 +11,42 @@ import (
 )
 
 const (
-	salt       = "jdkshf54jh5jh34kg4weknjf"
+	// salt contains key for generating password hash
+	salt = "jdkshf54jh5jh34kg4weknjf"
+
+	// signingKey contains key for decrypt and encrypt token
 	signingKey = "sjkfkjha234uilweorit34"
-	tokenTTL   = 12 * time.Hour
+
+	// tokenTTL is time of life-cycle of generated token
+	tokenTTL = 12 * time.Hour
 )
 
+// tokenClaims is a custom Claims containing jwt.StandardClaims and id of signed-in user
 type tokenClaims struct {
 	jwt.StandardClaims
 	UserID int `json:"user_id"`
 }
 
+// AuthService contains repository for working with auth in db
 type AuthService struct {
 	repo repository.Authorization
 }
 
+// NewAuthService returns pointer on a new instance of AuthService
 func NewAuthService(repo repository.Authorization) *AuthService {
 	return &AuthService{repo: repo}
 }
 
+// CreateUser creates model.User in DB using specified user model. It returns new user id and error
 func (s *AuthService) CreateUser(user model.User) (int, error) {
 	user.Password = generatePasswordHash(user.Password)
 
-	return s.repo.CreateUser(user)
+	userId, err := s.repo.CreateUser(user)
+
+	return userId, err
 }
 
+// GenerateToken generate token for signing in user. Returns a complete token and error
 func (s *AuthService) GenerateToken(username, password string) (string, error) {
 	password = generatePasswordHash(password)
 	user, err := s.repo.GetUser(username, password)
@@ -50,9 +62,12 @@ func (s *AuthService) GenerateToken(username, password string) (string, error) {
 		user.Id,
 	})
 
-	return token.SignedString([]byte(signingKey))
+	signedToken, err := token.SignedString([]byte(signingKey))
+
+	return signedToken, err
 }
 
+// ParseToken decrypts token and returns id of signed in user and error
 func (s *AuthService) ParseToken(accessToken string) (int, error) {
 	parsingFunc := func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -74,6 +89,7 @@ func (s *AuthService) ParseToken(accessToken string) (int, error) {
 	return claims.UserID, nil
 }
 
+// generatePasswordHash generates password hash using SHA-1 algorithm
 func generatePasswordHash(password string) string {
 	hash := sha1.New()
 	hash.Write([]byte(password))

@@ -1,4 +1,4 @@
-package todoListBackend
+package server
 
 import (
 	"context"

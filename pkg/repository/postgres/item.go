@@ -8,14 +8,17 @@ import (
 	"todolistBackend/pkg/repository/constants"
 )
 
+// TodoItemPostgres contains pointer on db instance
 type TodoItemPostgres struct {
 	db *sqlx.DB
 }
 
+// NewTodoItemPostgres returns a pointer on a new instance of TodoItemPostgres
 func NewTodoItemPostgres(db *sqlx.DB) *TodoItemPostgres {
 	return &TodoItemPostgres{db: db}
 }
 
+// Create creates a new model.TodoItem in db by specified list id. Returns id of new item model and error
 func (r *TodoItemPostgres) Create(listId int, item model.TodoItem) (int, error) {
 	tx, err := r.db.Begin()
 	if err != nil {
@@ -42,6 +45,7 @@ func (r *TodoItemPostgres) Create(listId int, item model.TodoItem) (int, error) 
 	return itemId, tx.Commit()
 }
 
+// GetAll returns error and slice of model.TodoItem by specified list id
 func (r *TodoItemPostgres) GetAll(listId int) ([]model.TodoItem, error) {
 	var items []model.TodoItem
 
@@ -57,6 +61,7 @@ func (r *TodoItemPostgres) GetAll(listId int) ([]model.TodoItem, error) {
 	return items, err
 }
 
+// GetById returns error and model of model.TodoItem by specified list and item ids
 func (r *TodoItemPostgres) GetById(listId, itemId int) (model.TodoItem, error) {
 	var item model.TodoItem
 
@@ -72,6 +77,7 @@ func (r *TodoItemPostgres) GetById(listId, itemId int) (model.TodoItem, error) {
 	return item, err
 }
 
+// DeleteById deletes model.TodoItem from db by specified list and item ids. Returns an error if there is one
 func (r *TodoItemPostgres) DeleteById(listId, itemId int) error {
 	query := fmt.Sprintf(
 		"DELETE FROM %s ti USING %s li "+
@@ -83,6 +89,7 @@ func (r *TodoItemPostgres) DeleteById(listId, itemId int) error {
 	return err
 }
 
+// Update updates model.TodoItem in db by specified list, item ids and model of updated item. Returns an error if there is one
 func (r *TodoItemPostgres) Update(listId int, itemId int, item model.UpdateItemInput) error {
 	setValues := make([]string, 0)
 	args := make([]interface{}, 0)

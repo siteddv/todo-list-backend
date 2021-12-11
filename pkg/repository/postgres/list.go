@@ -9,14 +9,17 @@ import (
 	"todolistBackend/pkg/repository/constants"
 )
 
+// TodoListPostgres contains pointer on db instance
 type TodoListPostgres struct {
 	db *sqlx.DB
 }
 
+// NewTodoListPostgres returns a pointer on a new instance of TodoListPostgres
 func NewTodoListPostgres(db *sqlx.DB) *TodoListPostgres {
 	return &TodoListPostgres{db: db}
 }
 
+// Create creates a new model.TodoList in db by specified user id. Returns id of new list and error
 func (r *TodoListPostgres) Create(userId int, list model.TodoList) (int, error) {
 	tx, err := r.db.Begin()
 	if err != nil {
@@ -43,6 +46,7 @@ func (r *TodoListPostgres) Create(userId int, list model.TodoList) (int, error) 
 	return listId, tx.Commit()
 }
 
+// GetAll returns error and slice of model.TodoList by specified user id
 func (r *TodoListPostgres) GetAll(userId int) ([]model.TodoList, error) {
 	var lists []model.TodoList
 
@@ -58,6 +62,7 @@ func (r *TodoListPostgres) GetAll(userId int) ([]model.TodoList, error) {
 	return lists, err
 }
 
+// GetById returns error and model of model.TodoList by specified user and list ids
 func (r *TodoListPostgres) GetById(userId, listId int) (model.TodoList, error) {
 	var list model.TodoList
 
@@ -73,6 +78,8 @@ func (r *TodoListPostgres) GetById(userId, listId int) (model.TodoList, error) {
 	return list, err
 }
 
+// DeleteById deletes model.TodoList from db by specified list and user ids. Returns an error if there is one.
+// This method also deletes all the items from specified list
 func (r *TodoListPostgres) DeleteById(userId, listId int) error {
 	var intListItems []int
 
@@ -108,6 +115,7 @@ func (r *TodoListPostgres) DeleteById(userId, listId int) error {
 	return err
 }
 
+// Update updates model.TodoList in db by specified list, user ids and model of updated item. Returns an error if there is one
 func (r *TodoListPostgres) Update(userId, listId int, list model.UpdateListInput) error {
 	setValues := make([]string, 0)
 	args := make([]interface{}, 0)

@@ -9,10 +9,10 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	todo "todolistBackend"
 	"todolistBackend/pkg/handler"
 	"todolistBackend/pkg/logging"
 	"todolistBackend/pkg/repository"
+	todo "todolistBackend/pkg/server"
 	"todolistBackend/pkg/service"
 )
 
