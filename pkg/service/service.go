@@ -8,7 +8,11 @@ import (
 type Authorization interface {
 	// CreateUser creates model.User in DB using specified user model. It returns new user id and error
 	CreateUser(user model.User) (int, error)
+
+	// GenerateToken generate token for signing in user. Returns a complete token and error
 	GenerateToken(username, password string) (string, error)
+
+	// ParseToken decrypts token and returns id of signed in user and error
 	ParseToken(token string) (int, error)
 }
 
