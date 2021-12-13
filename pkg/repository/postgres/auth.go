@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
 	"todolistBackend/pkg/model"
-	"todolistBackend/pkg/repository/postgres/constants"
 )
 
 // AuthPostgres contains pointer on db instance
@@ -21,7 +20,7 @@ func NewAuthPostgres(db *sqlx.DB) *AuthPostgres {
 func (r *AuthPostgres) CreateUser(user model.User) (int, error) {
 	var id int
 	query := fmt.Sprintf("INSERT INTO %s (%s, %s, %s) values ($1, $2, $3) RETURNING %s",
-		constants.UsersTable, constants.Name, constants.Username, constants.PasswordHash, constants.Id)
+		UsersTable, Name, Username, PasswordHash, Id)
 
 	row := r.db.QueryRow(query, user.Name, user.Username, user.Password)
 	if err := row.Scan(&id); err != nil {
@@ -35,7 +34,7 @@ func (r *AuthPostgres) CreateUser(user model.User) (int, error) {
 func (r *AuthPostgres) GetUser(username, password string) (model.User, error) {
 	var user model.User
 	query := fmt.Sprintf("SELECT %s FROM %s WHERE %s=$1 AND %s=$2",
-		constants.Id, constants.UsersTable, constants.Username, constants.PasswordHash)
+		Id, UsersTable, Username, PasswordHash)
 
 	err := r.db.Get(&user, query, username, password)
 

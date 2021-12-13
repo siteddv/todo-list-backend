@@ -6,7 +6,6 @@ import (
 	"strconv"
 	"strings"
 	"todolistBackend/pkg/model"
-	"todolistBackend/pkg/repository/postgres/constants"
 )
 
 // TodoListPostgres contains pointer on db instance
@@ -28,7 +27,7 @@ func (r *TodoListPostgres) Create(userId int, list model.TodoList) (int, error) 
 
 	var listId int
 	createListQuery := fmt.Sprintf("INSERT INTO %s (%s, %s) VALUES ($1, $2) RETURNING %s",
-		constants.TodoListTable, constants.Title, constants.Description, constants.Id)
+		TodoListTable, Title, Description, Id)
 	row := tx.QueryRow(createListQuery, list.Title, list.Description)
 	if err := row.Scan(&listId); err != nil {
 		_ = tx.Rollback()
@@ -36,7 +35,7 @@ func (r *TodoListPostgres) Create(userId int, list model.TodoList) (int, error) 
 	}
 
 	createUsersListsQuery := fmt.Sprintf("INSERT INTO %s (%s, %s) VALUES ($1, $2) RETURNING %s",
-		constants.UsersListsTable, constants.UserId, constants.ListId, constants.Id)
+		UsersListsTable, UserId, ListId, Id)
 	_, err = tx.Exec(createUsersListsQuery, userId, listId)
 	if err != nil {
 		_ = tx.Rollback()
@@ -54,9 +53,9 @@ func (r *TodoListPostgres) GetAll(userId int) ([]model.TodoList, error) {
 		"SELECT tl.%s, tl.%s, tl.%s "+
 			"FROM %s tl INNER JOIN %s ul on tl.%s = ul.%s "+
 			"WHERE ul.%s = $1",
-		constants.Id, constants.Title, constants.Description,
-		constants.TodoListTable, constants.UsersListsTable, constants.Id, constants.ListId,
-		constants.UserId)
+		Id, Title, Description,
+		TodoListTable, UsersListsTable, Id, ListId,
+		UserId)
 	err := r.db.Select(&lists, query, userId)
 
 	return lists, err
@@ -70,9 +69,9 @@ func (r *TodoListPostgres) GetById(userId, listId int) (model.TodoList, error) {
 		"SELECT tl.%s, tl.%s, tl.%s "+
 			"FROM %s tl INNER JOIN %s ul on tl.%s = ul.%s "+
 			"WHERE ul.%s = $1 AND ul.%s = $2",
-		constants.Id, constants.Title, constants.Description,
-		constants.TodoListTable, constants.UsersListsTable, constants.Id, constants.ListId,
-		constants.UserId, constants.ListId)
+		Id, Title, Description,
+		TodoListTable, UsersListsTable, Id, ListId,
+		UserId, ListId)
 	err := r.db.Get(&list, query, userId, listId)
 
 	return list, err
@@ -85,7 +84,7 @@ func (r *TodoListPostgres) DeleteById(userId, listId int) error {
 
 	selectListItemsQuery := fmt.Sprintf(
 		"SELECT %s FROM %s WHERE %s=$1",
-		constants.Id, constants.ListsItemsTable, constants.ListId)
+		Id, ListsItemsTable, ListId)
 	err := r.db.Select(&intListItems, selectListItemsQuery, listId)
 	if err != nil {
 		return err
@@ -99,7 +98,7 @@ func (r *TodoListPostgres) DeleteById(userId, listId int) error {
 
 	deleteListItemsQuery := fmt.Sprintf(
 		"DELETE FROM %s WHERE %s IN (%s)",
-		constants.TodoItemsTable, constants.Id, joinedListItems)
+		TodoItemsTable, Id, joinedListItems)
 	_, err = r.db.Exec(deleteListItemsQuery)
 	if err != nil {
 		return err
@@ -108,8 +107,8 @@ func (r *TodoListPostgres) DeleteById(userId, listId int) error {
 	deleteListQuery := fmt.Sprintf(
 		"DELETE FROM %s tl USING %s ul "+
 			"WHERE tl.%s = ul.%s AND ul.%s = $1 AND ul.%s = $2",
-		constants.TodoListTable, constants.UsersListsTable,
-		constants.Id, constants.ListId, constants.UserId, constants.ListId)
+		TodoListTable, UsersListsTable,
+		Id, ListId, UserId, ListId)
 
 	_, err = r.db.Exec(deleteListQuery, userId, listId)
 	return err
@@ -122,13 +121,13 @@ func (r *TodoListPostgres) Update(userId, listId int, list model.UpdateListInput
 	argId := 1
 
 	if list.Title != nil {
-		setValues = append(setValues, fmt.Sprintf("%s=$%d", constants.Title, argId))
+		setValues = append(setValues, fmt.Sprintf("%s=$%d", Title, argId))
 		args = append(args, *list.Title)
 		argId++
 	}
 
 	if list.Description != nil {
-		setValues = append(setValues, fmt.Sprintf("%s=$%d", constants.Description, argId))
+		setValues = append(setValues, fmt.Sprintf("%s=$%d", Description, argId))
 		args = append(args, *list.Description)
 		argId++
 	}
@@ -138,8 +137,8 @@ func (r *TodoListPostgres) Update(userId, listId int, list model.UpdateListInput
 
 	query := fmt.Sprintf("UPDATE %s tl SET %s FROM %s ul "+
 		"WHERE tl.%s=ul.%s AND ul.%s=$%d AND ul.%s=$%d",
-		constants.TodoListTable, setQuery, constants.UsersListsTable,
-		constants.Id, constants.ListId, constants.ListId, argId, constants.UserId, argId+1)
+		TodoListTable, setQuery, UsersListsTable,
+		Id, ListId, ListId, argId, UserId, argId+1)
 
 	_, err := r.db.Exec(query, args...)
 	return err

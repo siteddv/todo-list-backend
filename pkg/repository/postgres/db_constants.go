@@ -1,4 +1,4 @@
-package constants
+package repository
 
 //Tables names
 const (
