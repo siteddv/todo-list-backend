@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 	"todolistBackend/pkg/model"
-	"todolistBackend/pkg/repository/constants"
+	"todolistBackend/pkg/repository/postgres/constants"
 )
 
 // TodoListPostgres contains pointer on db instance
