@@ -5,6 +5,8 @@ import (
 	"todolistBackend/pkg/repository"
 )
 
+//go:generate mockgen -source=service.go -destination=mocks/mock.go
+
 type Authorization interface {
 	// CreateUser creates model.User in DB using specified user model. It returns new user id and error
 	CreateUser(user model.User) (int, error)
