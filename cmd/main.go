@@ -9,11 +9,11 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"todolistBackend/pkg/handler"
+	"todolistBackend/internal/handler"
+	"todolistBackend/internal/repository"
+	todo "todolistBackend/internal/server"
+	"todolistBackend/internal/service"
 	"todolistBackend/pkg/logging"
-	"todolistBackend/pkg/repository"
-	todo "todolistBackend/pkg/server"
-	"todolistBackend/pkg/service"
 )
 
 // @title Todo App API

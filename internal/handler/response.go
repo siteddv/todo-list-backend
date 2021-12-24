@@ -3,7 +3,7 @@ package handler
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
-	"todolistBackend/pkg/model"
+	"todolistBackend/internal/model"
 )
 
 // errorResponse contains message whether server occurs an error and used for reporting on this one in response on request

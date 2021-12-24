@@ -1,8 +1,8 @@
 package service
 
 import (
-	"todolistBackend/pkg/model"
-	"todolistBackend/pkg/repository"
+	"todolistBackend/internal/model"
+	"todolistBackend/internal/repository"
 )
 
 //go:generate mockgen -source=service.go -destination=mocks/mock.go

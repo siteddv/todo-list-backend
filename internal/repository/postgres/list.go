@@ -5,7 +5,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	"strconv"
 	"strings"
-	"todolistBackend/pkg/model"
+	"todolistBackend/internal/model"
 )
 
 // TodoListPostgres contains pointer on db instance

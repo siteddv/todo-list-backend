@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
-	"todolistBackend/pkg/model"
+	"todolistBackend/internal/model"
 )
 
 // @Summary Create item model

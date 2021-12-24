@@ -2,8 +2,8 @@ package repository
 
 import (
 	"github.com/jmoiron/sqlx"
-	"todolistBackend/pkg/model"
-	postgres "todolistBackend/pkg/repository/postgres"
+	"todolistBackend/internal/model"
+	postgres "todolistBackend/internal/repository/postgres"
 )
 
 type Authorization interface {

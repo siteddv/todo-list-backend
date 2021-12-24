@@ -1,8 +1,8 @@
 package service
 
 import (
-	"todolistBackend/pkg/model"
-	"todolistBackend/pkg/repository"
+	"todolistBackend/internal/model"
+	"todolistBackend/internal/repository"
 )
 
 // TodoItemService contains repository for working with items in db

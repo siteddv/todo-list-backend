@@ -8,9 +8,9 @@ import (
 	"github.com/magiconair/properties/assert"
 	"net/http/httptest"
 	"testing"
-	"todolistBackend/pkg/model"
-	"todolistBackend/pkg/service"
-	mockservice "todolistBackend/pkg/service/mocks"
+	"todolistBackend/internal/model"
+	"todolistBackend/internal/service"
+	mockservice "todolistBackend/internal/service/mocks"
 )
 
 func TestHandler_signUp(t *testing.T) {

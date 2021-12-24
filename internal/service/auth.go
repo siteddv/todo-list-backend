@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"time"
-	"todolistBackend/pkg/model"
-	"todolistBackend/pkg/repository"
+	"todolistBackend/internal/model"
+	"todolistBackend/internal/repository"
 )
 
 const (

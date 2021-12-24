@@ -3,7 +3,7 @@ package handler
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"todolistBackend/pkg/model"
+	"todolistBackend/internal/model"
 )
 
 // @Summary SignUp

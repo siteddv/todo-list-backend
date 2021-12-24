@@ -6,7 +6,7 @@ import (
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 
 	_ "todolistBackend/docs"
-	"todolistBackend/pkg/service"
+	"todolistBackend/internal/service"
 )
 
 // Handler contains collection of services for routing

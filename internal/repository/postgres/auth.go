@@ -3,7 +3,7 @@ package repository
 import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
-	"todolistBackend/pkg/model"
+	"todolistBackend/internal/model"
 )
 
 // AuthPostgres contains pointer on db instance

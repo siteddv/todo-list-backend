@@ -7,8 +7,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"net/http/httptest"
 	"testing"
-	"todolistBackend/pkg/service"
-	mockservice "todolistBackend/pkg/service/mocks"
+	"todolistBackend/internal/service"
+	mockservice "todolistBackend/internal/service/mocks"
 )
 
 func TestHandler_userIdentity(t *testing.T) {
